@@ -30,7 +30,7 @@ class RandomizedImageDownloaderService(
     }
 
     suspend fun downloadImages() = coroutineScope {
-        while(true) {
+        while (true) {
             val randomImageUrl = generateRandomSizesDownloadUrl()
             withContext(Dispatchers.IO) {
                 try {

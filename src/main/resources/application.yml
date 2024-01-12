@@ -1,3 +1,9 @@
 downloader:
   threads:
     count: 10
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/downloader
+    username: postgres
+    password: postgres
