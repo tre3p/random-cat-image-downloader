@@ -10,5 +10,5 @@ CREATE TABLE IF NOT EXISTS summary(
     id serial primary key,
     files_count integer,
     files_size double precision,
-    updated_at timestamp
+    stat_timestamp timestamp
 );
