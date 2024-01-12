@@ -51,7 +51,7 @@ class RandomizedImageProcessorService(
                     log.debug { "downloadImages(): image downloaded" }
                     toProcessChannel.send(Pair(randomImageResponse, randomImageUrl))
                 } catch (e: RestClientException) {
-                    // TODO: log unable to download image
+                    log.error { e; "downloadImages(): unable to download image" }
                 }
             }
         }
@@ -70,7 +70,7 @@ class RandomizedImageProcessorService(
                     toAnalyzeChannel.send(imgData)
                     log.debug { "startImagesProcessing(): images processed" }
                 } catch (e: DataAccessException) {
-                    // TODO: log unable to save image to DB
+                    log.error { e; "startImagesProcessing(): unable to save message to DB" }
                 }
             }
         }
