@@ -8,11 +8,11 @@ import org.springframework.data.relational.core.mapping.Table
 class ImageData(
     @Id val id: Long?,
     @Column(value = "url") var downloadUrl: String?,
-    val size: Long,
+    val size: Double,
     val contentType: String,
     val content: ByteArray
 ) {
-    constructor(size: Long, contentType: String, content: ByteArray): this(
+    constructor(size: Double, contentType: String, content: ByteArray): this(
         null,
         null,
         size,
