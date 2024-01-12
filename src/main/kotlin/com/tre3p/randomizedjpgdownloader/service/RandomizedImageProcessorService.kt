@@ -41,7 +41,7 @@ class RandomizedImageProcessorService(
         launch { startImagesAnalyzing() }
     }
 
-    private suspend fun startImagesDownloading() = coroutineScope {
+    private suspend fun startImagesDownloading() {
         while (true) {
             val randomImageUrl = generateRandomImageDownloadUrl()
             log.debug { "downloadImages(): downloading image from url: $randomImageUrl" }
