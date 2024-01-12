@@ -45,9 +45,11 @@ class RandomizedImageProcessorService(
         while (true) {
             val randomImageUrl = generateRandomImageDownloadUrl()
             log.debug { "downloadImages(): downloading image from url: $randomImageUrl" }
+
+            var randomImageResponse: ResponseEntity<ByteArray>
             withContext(Dispatchers.IO) {
                 try {
-                    val randomImageResponse = downloaderService.downloadBytes(randomImageUrl)
+                    randomImageResponse = downloaderService.downloadBytes(randomImageUrl)
                     log.debug { "downloadImages(): image downloaded" }
                     toProcessChannel.send(Pair(randomImageResponse, randomImageUrl))
                 } catch (e: RestClientException) {
@@ -67,12 +69,13 @@ class RandomizedImageProcessorService(
             withContext(Dispatchers.IO) {
                 try {
                     fileRepository.save(imgData)
-                    toAnalyzeChannel.send(imgData)
-                    log.debug { "startImagesProcessing(): images processed" }
                 } catch (e: DataAccessException) {
                     log.error { e; "startImagesProcessing(): unable to save message to DB" }
                 }
             }
+
+            toAnalyzeChannel.send(imgData)
+            log.debug { "startImagesProcessing(): images processed" }
         }
     }
 

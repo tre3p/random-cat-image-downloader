@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 class DownloaderService(private val restTemplate: RestTemplate) {
-    fun downloadBytes(url: String): ResponseEntity<ByteArray> {
+    suspend fun downloadBytes(url: String): ResponseEntity<ByteArray> {
         val response = restTemplate.getForEntity(url, ByteArray::class.java)
         return response
     }
