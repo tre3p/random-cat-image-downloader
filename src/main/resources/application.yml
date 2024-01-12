@@ -1,6 +1,6 @@
 downloader:
   threads:
-    count: 10
+    count: 50
 
 spring:
   datasource:

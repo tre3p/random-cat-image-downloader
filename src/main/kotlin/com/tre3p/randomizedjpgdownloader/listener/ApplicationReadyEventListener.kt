@@ -1,16 +1,17 @@
 package com.tre3p.randomizedjpgdownloader.listener
 
-import com.tre3p.randomizedjpgdownloader.service.RandomizedImageDownloaderService
+import com.tre3p.randomizedjpgdownloader.service.RandomizedImageProcessorService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
-class ApplicationReadyEventListener(private val jpgDownloaderService: RandomizedImageDownloaderService) {
+class ApplicationReadyEventListener(private val jpgDownloaderService: RandomizedImageProcessorService) {
 
     @EventListener(ApplicationReadyEvent::class)
-    fun launchJpgDownloading() = runBlocking {
-        jpgDownloaderService.launchImagesDownloading()
+    fun launchJpgDownloading() = runBlocking(Dispatchers.Default) {
+        jpgDownloaderService.launchImagesProcessing()
     }
 }

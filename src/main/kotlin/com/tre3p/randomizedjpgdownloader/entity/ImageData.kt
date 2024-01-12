@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.dto
+package com.tre3p.randomizedjpgdownloader.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
@@ -12,7 +12,7 @@ class ImageData(
     val contentType: String,
     val content: ByteArray
 ) {
-    constructor(size: Double, contentType: String, content: ByteArray): this(
+    constructor(size: Double, contentType: String, content: ByteArray) : this(
         null,
         null,
         size,
