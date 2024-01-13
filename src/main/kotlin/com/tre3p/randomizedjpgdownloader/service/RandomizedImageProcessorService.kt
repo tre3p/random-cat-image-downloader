@@ -105,9 +105,9 @@ class RandomizedImageProcessorService(
     }
 
     private fun convertImageResponseToImageData(imgResponse: ResponseEntity<ByteArray>): ImageData {
-        val contentType = imgResponse.headers["Content-Type"]?.first()!!
-        val content = imgResponse.body
-        val contentSize = content?.sizeInKilobytes()!!
+        val contentType = imgResponse.headers["Content-Type"]?.first().orEmpty()
+        val content = imgResponse.body ?: byteArrayOf()
+        val contentSize = content.sizeInKilobytes()
 
         return ImageData(contentSize, contentType, content)
     }
