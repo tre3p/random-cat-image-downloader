@@ -1,9 +1,9 @@
 downloader:
   threads:
-    count: 50
+    count: ${DOWNLOADER_THREADS_COUNT:50}
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/downloader
-    username: postgres
-    password: postgres
+    url: ${JDBC_URL:jdbc:postgresql://localhost:5432/downloader}
+    username: ${JDBC_USERNAME:postgres}
+    password: ${JDBC_PASSWORD:postgres}
