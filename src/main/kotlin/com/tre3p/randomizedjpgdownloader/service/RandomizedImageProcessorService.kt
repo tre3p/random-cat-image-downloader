@@ -27,6 +27,10 @@ class RandomizedImageProcessorService(
     private val statRepository: StatRepository
 ) {
     private val IMAGE_DOWNLOAD_URL_TEMPLATE = "https://loremflickr.com/%s/%s"
+    private val IMAGE_SIZE_LOWER_BOUND = 10
+    private val IMAGE_SIZE_UPPER_BOUND = 5000
+
+
     private val log = KotlinLogging.logger {}
 
     private val toProcessChannel = Channel<Pair<ResponseEntity<ByteArray>, String>>(downloaderThreadsCount)
@@ -109,8 +113,8 @@ class RandomizedImageProcessorService(
     }
 
     private fun generateRandomImageDownloadUrl(): String {
-        val width = Random.nextInt(10..5000)
-        val height = Random.nextInt(10..5000)
+        val width = Random.nextInt(IMAGE_SIZE_LOWER_BOUND..IMAGE_SIZE_UPPER_BOUND)
+        val height = Random.nextInt(IMAGE_SIZE_LOWER_BOUND..IMAGE_SIZE_UPPER_BOUND)
 
         return String.format(IMAGE_DOWNLOAD_URL_TEMPLATE, width, height)
     }
