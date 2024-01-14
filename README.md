@@ -1,7 +1,7 @@
 # Random JPG Downloader
 
-Service main purpose is to start images downloading process on application startup, store them in database and log
-information about files in another table.
+Service which main purpose is to start images downloading process on application startup, store them in database and log
+information about downloaded files in another table.
 
 ## How to launch
 
