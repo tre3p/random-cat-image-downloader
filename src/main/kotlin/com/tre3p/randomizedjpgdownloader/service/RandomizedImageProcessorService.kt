@@ -10,7 +10,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.DataAccessException
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -21,24 +20,29 @@ import kotlin.random.nextInt
 
 @Service
 class RandomizedImageProcessorService(
-    @Value("\${downloader.threads.count}") private val downloaderThreadsCount: Int,
     private val fileRepository: FileRepository,
     private val downloaderService: DownloaderService,
     private val statRepository: StatRepository
 ) {
-    private val IMAGE_DOWNLOAD_URL_TEMPLATE = "https://loremflickr.com/%s/%s"
-    private val IMAGE_SIZE_LOWER_BOUND = 10
-    private val IMAGE_SIZE_UPPER_BOUND = 5000
+    companion object ImageRelatedConstants {
+        private const val IMAGE_DOWNLOAD_URL_TEMPLATE = "https://loremflickr.com/%s/%s"
+        private const val IMAGE_SIZE_LOWER_BOUND = 10
+        private const val IMAGE_SIZE_UPPER_BOUND = 5000
+    }
 
+    /**
+     * Coroutines count limited to (available processors * 2) because most of the work is IO bound
+     */
+    private val downloaderCoroutinesCount = Runtime.getRuntime().availableProcessors() * 2
 
     private val log = KotlinLogging.logger {}
 
-    private val toProcessChannel = Channel<Pair<ResponseEntity<ByteArray>, String>>(downloaderThreadsCount)
-    private val toAnalyzeChannel = Channel<ImageData>(downloaderThreadsCount)
+    private val toProcessChannel = Channel<Pair<ResponseEntity<ByteArray>, String>>(downloaderCoroutinesCount)
+    private val toAnalyzeChannel = Channel<ImageData>(downloaderCoroutinesCount)
 
     suspend fun launchImagesProcessing() = coroutineScope {
         log.debug { "launchImagesDownloading(): launching images downloading" }
-        repeat(downloaderThreadsCount) {
+        repeat(downloaderCoroutinesCount) {
             launch { startImagesDownloading() }
         }
         launch { startImagesProcessing() }
