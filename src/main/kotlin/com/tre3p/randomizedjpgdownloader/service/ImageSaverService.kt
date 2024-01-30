@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class ImageSaverService(private val imageRepository: ImageRepository) {
-    suspend fun saveImage(imageData: ImageData) {
+    fun saveImage(imageData: ImageData) {
         imageRepository.save(imageData)
     }
 }

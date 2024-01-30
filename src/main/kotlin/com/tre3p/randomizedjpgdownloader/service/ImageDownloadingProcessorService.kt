@@ -27,13 +27,15 @@ class ImageDownloadingProcessorService(
     }
 
    private suspend fun startImagesProcessing() = coroutineScope {
-        val randomImageUrl = generateRandomImageDownloadUrl()
-        val imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
-        launch { processImage(imageResponse) }
+        while (true) {
+            val randomImageUrl = generateRandomImageDownloadUrl()
+            val imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
+            launch { processImage(imageResponse) }
+        }
     }
 
     @Transactional
-    protected suspend fun processImage(imgData: ImageData) {
+    fun processImage(imgData: ImageData) {
         imageSaverService.saveImage(imgData)
         imageStatService.updateImageStat(imgData)
     }
