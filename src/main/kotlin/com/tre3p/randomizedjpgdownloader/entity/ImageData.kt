@@ -12,9 +12,9 @@ class ImageData(
     val contentType: String,
     val content: ByteArray
 ) {
-    constructor(size: Double, contentType: String, content: ByteArray) : this(
+    constructor(size: Double, contentType: String, content: ByteArray, downloadUrl: String) : this(
         null,
-        null,
+        downloadUrl,
         size,
         contentType,
         content
