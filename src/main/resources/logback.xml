@@ -7,7 +7,7 @@
         </layout>
     </appender>
 
-    <logger name="com.tre3p" level="debug"/>
+    <logger name="com.tre3p" level="info"/>
     <logger name="com.springframework" level="info"/>
 
     <root level="INFO">
