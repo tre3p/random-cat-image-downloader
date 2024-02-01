@@ -2,8 +2,10 @@ package com.tre3p.randomizedjpgdownloader.service
 
 import com.tre3p.randomizedjpgdownloader.entity.ImageData
 import io.github.oshai.kotlinlogging.KotlinLogging
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -28,24 +30,35 @@ class ImageDownloadingProcessorService(
     private val log = KotlinLogging.logger {}
 
     suspend fun launchImageDownloading(coroutinesCount: Int) = coroutineScope {
-        log.info { "launchImageDownloading(): launching images downloading" }
+        log.info { "launchImageDownloading(): launching images downloading. coroutinesCount: $coroutinesCount" }
         repeat(coroutinesCount) {
             launch { startImagesProcessing() }
         }
         log.info { "launchImageDownloading(): all coroutines are started" }
     }
 
-   private suspend fun startImagesProcessing() = coroutineScope {
+   private suspend fun startImagesProcessing() {
         while (true) {
             val randomImageUrl = generateRandomImageDownloadUrl()
-            val imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
-            launch { img.processImage(imageResponse) }
+            withContext(Dispatchers.IO) {
+                var imageResponse: ImageData? = null
+
+                try {
+                    imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
+                } catch (e: Exception) {
+                    log.warn { "startImagesProcessing(): error while downloading image: ${e.message}" }
+                }
+
+                if (imageResponse != null) {
+                    processImage(imageResponse)
+                }
+            }
         }
     }
 
     //@Transactional
     // TODO: marking this method as @Transactional leads to NoClassDefFoundError on reactivestreams library
-    fun processImage(imgData: ImageData) {
+    suspend fun processImage(imgData: ImageData) {
         imageSaverService.saveImage(imgData)
         imageStatService.updateImageStat(imgData)
     }

@@ -9,7 +9,10 @@ import org.springframework.stereotype.Component
 @Component
 class ApplicationReadyEventListener(private val imageDownloadingProcessorService: ImageDownloadingProcessorService) {
 
-    private val coroutinesCount = Runtime.getRuntime().availableProcessors() * 2;
+    /**
+     * Coroutines count set to (available cores * 4) because most of the  work is IO-bound
+     */
+    private val coroutinesCount = Runtime.getRuntime().availableProcessors() * 4
 
     @EventListener(ApplicationReadyEvent::class)
     fun launchJpgDownloading() = runBlocking {
