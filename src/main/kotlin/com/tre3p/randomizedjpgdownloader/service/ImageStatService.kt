@@ -21,21 +21,22 @@ class ImageStatService(private val imageStatRepository: ImageStatRepository) {
 
     @PostConstruct
     fun fetchCurrentStat() {
-        log.info { "+fetchCurrentStat(): fetching current stats.." }
+        log.info { "fetchCurrentStat(): fetching current stats.." }
         val currentFileStats = imageStatRepository.selectCurrentFileStats()
-        log.info { "fetchCurrentStat(): current stats fetched. files count: ${currentFileStats.totalCount}, files size: ${currentFileStats.totalSize}" }
+        log.info { "fetchCurrentStat(): current stats fetched. files count: ${currentFileStats.totalFilesCount}, files size: ${currentFileStats.totalFilesSize}" }
 
-        currentFilesCount = AtomicInteger(currentFileStats.totalCount)
-        currentFilesSize = AtomicLong(currentFileStats.totalSize.toRawBits())
+        currentFilesCount = AtomicInteger(currentFileStats.totalFilesCount)
+        currentFilesSize = AtomicLong(currentFileStats.totalFilesSize.toRawBits())
     }
 
     fun updateImageStat(imageData: ImageData) {
-        log.info { "+updateImageStat(): image size: ${imageData.size}" }
+        log.debug { "+updateImageStat(): image size ${imageData.size}, image download url: ${imageData.downloadUrl}, image content type: ${imageData.contentType}" }
         currentFilesSize.addDoubleBits(imageData.size)
         currentFilesCount.incrementAndGet()
 
         imageStatRepository.save(ImageStat(currentFilesCount.get(), Double.fromBits(currentFilesSize.get()), LocalDateTime.now()))
-        log.info { "-updateImageStat(): image stats updated" }
+        log.info { "updateImageStat(): image stats updated. current files count: ${currentFilesCount.get()}, current files size: ${Double.fromBits(currentFilesSize.get())}" }
+        log.debug { "-updateImageStat()" }
     }
 
     private fun AtomicLong.addDoubleBits(double: Double) = this.updateAndGet { prevVal -> (Double.fromBits(prevVal) + double).toRawBits() }
