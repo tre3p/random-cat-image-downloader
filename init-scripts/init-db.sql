@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS files(
-    id serial primary key,
+    id bigint generated always as identity,
     url varchar(50),
     size double precision,
     content_type varchar(50),
@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS files(
 );
 
 CREATE TABLE IF NOT EXISTS summary(
-    id serial primary key,
-    files_count integer,
+    id bigint generated always as identity,
+    files_count bigint,
     files_size double precision,
     stat_timestamp timestamp
 );
