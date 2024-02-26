@@ -1,7 +1,7 @@
-package com.tre3p.randomizedjpgdownloader.repository
+package com.tre3p.randomcatimgdownloader.repository
 
-import com.tre3p.randomizedjpgdownloader.dto.CurrentImageStat
-import com.tre3p.randomizedjpgdownloader.entity.ImageStat
+import com.tre3p.randomcatimgdownloader.dto.CurrentImageStat
+import com.tre3p.randomcatimgdownloader.entity.ImageStat
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

@@ -7,4 +7,4 @@ spring:
     change-log: db/changelog/main-changelog.xml
 
 image:
-  directory: ${IMAGE_SAVE_DIRECTORY:images/}
+  directory: ${IMAGE_SAVE_DIRECTORY:cats/}

@@ -1,6 +1,6 @@
-package com.tre3p.randomizedjpgdownloader.service
+package com.tre3p.randomcatimgdownloader.service
 
-import com.tre3p.randomizedjpgdownloader.dto.ImageDto
+import com.tre3p.randomcatimgdownloader.dto.ImageDto
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate

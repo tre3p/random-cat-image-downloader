@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.service
+package com.tre3p.randomcatimgdownloader.service
 
 import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service

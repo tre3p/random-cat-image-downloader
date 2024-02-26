@@ -1,6 +1,6 @@
-package com.tre3p.randomizedjpgdownloader.repository
+package com.tre3p.randomcatimgdownloader.repository
 
-import com.tre3p.randomizedjpgdownloader.entity.ImageData
+import com.tre3p.randomcatimgdownloader.entity.ImageData
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

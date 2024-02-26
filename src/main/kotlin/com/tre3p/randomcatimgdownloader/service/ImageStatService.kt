@@ -1,9 +1,9 @@
-package com.tre3p.randomizedjpgdownloader.service
+package com.tre3p.randomcatimgdownloader.service
 
-import com.tre3p.randomizedjpgdownloader.dto.ImageDto
-import com.tre3p.randomizedjpgdownloader.entity.ImageStat
-import com.tre3p.randomizedjpgdownloader.misc.AtomicDouble
-import com.tre3p.randomizedjpgdownloader.repository.ImageStatRepository
+import com.tre3p.randomcatimgdownloader.dto.ImageDto
+import com.tre3p.randomcatimgdownloader.entity.ImageStat
+import com.tre3p.randomcatimgdownloader.misc.AtomicDouble
+import com.tre3p.randomcatimgdownloader.repository.ImageStatRepository
 import io.github.oshai.kotlinlogging.KotlinLogging
 import jakarta.annotation.PostConstruct
 import org.springframework.stereotype.Service

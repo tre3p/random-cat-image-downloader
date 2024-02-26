@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.entity
+package com.tre3p.randomcatimgdownloader.entity
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column

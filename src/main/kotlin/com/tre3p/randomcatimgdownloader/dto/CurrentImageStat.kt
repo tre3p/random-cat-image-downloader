@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.dto
+package com.tre3p.randomcatimgdownloader.dto
 
 data class CurrentImageStat(
     val totalFilesCount: Int = 0,

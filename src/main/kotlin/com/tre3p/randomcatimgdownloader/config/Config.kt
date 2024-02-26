@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.config
+package com.tre3p.randomcatimgdownloader.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

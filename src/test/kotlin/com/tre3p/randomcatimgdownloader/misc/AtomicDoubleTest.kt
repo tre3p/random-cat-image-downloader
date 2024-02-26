@@ -1,4 +1,4 @@
-package com.tre3p.randomizedjpgdownloader.misc
+package com.tre3p.randomcatimgdownloader.misc
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach

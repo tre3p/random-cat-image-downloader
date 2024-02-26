@@ -9,10 +9,10 @@
     </parent>
 
     <groupId>com.tre3p</groupId>
-    <artifactId>randomized-jpg-downloader</artifactId>
+    <artifactId>random-cat-image-downloader</artifactId>
     <version>1.1.0</version>
-    <name>randomized-jpg-downloader</name>
-    <description>Random JPG Downloader Service</description>
+    <name>random-cat-image-downloader</name>
+    <description>Random Cat Image Downloader Service</description>
 
     <properties>
         <java.version>21</java.version>

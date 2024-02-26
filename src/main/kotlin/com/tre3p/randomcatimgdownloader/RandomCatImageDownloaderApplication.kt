@@ -1,11 +1,11 @@
-package com.tre3p.randomizedjpgdownloader
+package com.tre3p.randomcatimgdownloader
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class RandomizedJpgDownloaderApplication
+class RandomCatImageDownloaderApplication
 
 fun main(args: Array<String>) {
-	runApplication<RandomizedJpgDownloaderApplication>(*args)
+	runApplication<RandomCatImageDownloaderApplication>(*args)
 }
