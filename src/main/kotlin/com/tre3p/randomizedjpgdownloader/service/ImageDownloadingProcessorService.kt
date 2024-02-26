@@ -1,5 +1,6 @@
 package com.tre3p.randomizedjpgdownloader.service
 
+import com.tre3p.randomizedjpgdownloader.dto.ImageDto
 import com.tre3p.randomizedjpgdownloader.entity.ImageData
 import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
@@ -7,18 +8,21 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
+import java.nio.file.Paths
+import java.util.UUID
 import kotlin.random.Random
 import kotlin.random.nextInt
 
 @Service
 class ImageDownloadingProcessorService(
-    private val imageSaverService: ImageSaverService,
+    private val imageSaverService: ImageDbSaverService,
     private val imageStatService: ImageStatService,
-    private val imageDownloaderService: ImageDownloaderService
+    private val imageDownloaderService: ImageDownloaderService,
+    private val imageDiskSaverService: ImageDiskSaverService
 ) {
     companion object ImageConstants {
         private const val IMAGE_DOWNLOAD_URL_TEMPLATE = "https://loremflickr.com/%s/%s"
@@ -29,6 +33,9 @@ class ImageDownloadingProcessorService(
     @Lazy
     @Autowired
     private lateinit var imgProcessorService: ImageDownloadingProcessorService
+
+    @Value("\${image.directory}")
+    private lateinit var imageSaveDirectory: String
 
     private val log = KotlinLogging.logger {}
 
@@ -44,7 +51,7 @@ class ImageDownloadingProcessorService(
         while (true) {
             val randomImageUrl = generateRandomImageDownloadUrl()
             withContext(Dispatchers.IO) {
-                var imageResponse: ImageData? = null
+                var imageResponse: ImageDto? = null
 
                 try {
                     imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
@@ -60,9 +67,16 @@ class ImageDownloadingProcessorService(
     }
 
     @Transactional
-    suspend fun processImage(imgData: ImageData) {
-        imageSaverService.saveImage(imgData)
-        imageStatService.updateImageStat(imgData)
+    suspend fun processImage(imgDto: ImageDto) {
+        val imageFileName = generateRandomImageFileName()
+        val imageRelativePath = if (imageSaveDirectory.endsWith("/")) "$imageSaveDirectory$imageFileName" else "$imageSaveDirectory/$imageFileName"
+        val imageFilePath = Paths.get(imageRelativePath).toAbsolutePath().toString()
+
+        imageDiskSaverService.saveImageToDisk(imageFilePath, imgDto.imageBytes)
+        val imgData = ImageData(imgDto.imageSizeKb, imgDto.imageContentType, imageFilePath, imgDto.downloadUrl)
+
+        imageSaverService.saveImageData(imgData)
+        imageStatService.updateImageStat(imgDto)
     }
 
     private fun generateRandomImageDownloadUrl(): String {
@@ -71,4 +85,6 @@ class ImageDownloadingProcessorService(
 
         return String.format(IMAGE_DOWNLOAD_URL_TEMPLATE, width, height)
     }
+
+    private fun generateRandomImageFileName(): String = "${UUID.randomUUID()}.jpeg"
 }

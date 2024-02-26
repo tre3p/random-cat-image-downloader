@@ -6,13 +6,13 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import org.springframework.stereotype.Service
 
 @Service
-class ImageSaverService(private val imageRepository: ImageRepository) {
+class ImageDbSaverService(private val imageRepository: ImageRepository) {
 
     private val log = KotlinLogging.logger {}
 
-    fun saveImage(imageData: ImageData) {
-        log.debug { "+saveImage(): saving image" }
+    fun saveImageData(imageData: ImageData) {
+        log.debug { "+saveImageData(): saving image" }
         imageRepository.save(imageData)
-        log.debug { "-saveImage(): image saved" }
+        log.debug { "-saveImageData(): image saved" }
     }
 }

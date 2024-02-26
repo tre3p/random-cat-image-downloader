@@ -5,3 +5,6 @@ spring:
     password: ${JDBC_PASSWORD:postgres}
   liquibase:
     change-log: db/changelog/main-changelog.xml
+
+image:
+  directory: ${IMAGE_SAVE_DIRECTORY:images/}

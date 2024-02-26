@@ -1,6 +1,6 @@
 package com.tre3p.randomizedjpgdownloader.service
 
-import com.tre3p.randomizedjpgdownloader.entity.ImageData
+import com.tre3p.randomizedjpgdownloader.dto.ImageDto
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -8,17 +8,17 @@ import org.springframework.web.client.RestTemplate
 @Service
 class ImageDownloaderService(private val restTemplate: RestTemplate) {
 
-    suspend fun downloadImage(url: String): ImageData {
+    suspend fun downloadImage(url: String): ImageDto {
         val response = restTemplate.getForEntity(url, ByteArray::class.java)
-        return convertImageResponseToImageData(response, url)
+        return convertImageResponseToImageDto(response, url)
     }
 
-    private fun convertImageResponseToImageData(imgResponse: ResponseEntity<ByteArray>, downloadUrl: String): ImageData {
+    private fun convertImageResponseToImageDto(imgResponse: ResponseEntity<ByteArray>, downloadUrl: String): ImageDto {
         val contentType = imgResponse.headers["Content-Type"]?.first().orEmpty()
         val content = imgResponse.body ?: byteArrayOf()
         val contentSize = content.sizeInKilobytes()
 
-        return ImageData(contentSize, contentType, content, downloadUrl)
+        return ImageDto(content, downloadUrl, contentType, contentSize)
     }
 
     fun ByteArray.sizeInKilobytes(): Double = (this.size / 1024.0)

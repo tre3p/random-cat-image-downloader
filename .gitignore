@@ -34,3 +34,6 @@ build/
 
 ### Postgres ###
 .pg-volume/
+
+### Image Directory ###
+images/

@@ -16,7 +16,7 @@
             <column name="url" type="varchar(50)"/>
             <column name="size" type="double precision"/>
             <column name="content_type" type="varchar(50)"/>
-            <column name="content" type="bytea"/>
+            <column name="content_path" type="varchar"/>
         </createTable>
     </changeSet>
 

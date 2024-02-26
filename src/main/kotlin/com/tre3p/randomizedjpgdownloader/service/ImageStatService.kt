@@ -1,6 +1,6 @@
 package com.tre3p.randomizedjpgdownloader.service
 
-import com.tre3p.randomizedjpgdownloader.entity.ImageData
+import com.tre3p.randomizedjpgdownloader.dto.ImageDto
 import com.tre3p.randomizedjpgdownloader.entity.ImageStat
 import com.tre3p.randomizedjpgdownloader.misc.AtomicDouble
 import com.tre3p.randomizedjpgdownloader.repository.ImageStatRepository
@@ -29,9 +29,9 @@ class ImageStatService(private val imageStatRepository: ImageStatRepository) {
         currentFilesSize = AtomicDouble(currentFileStats.totalFilesSize)
     }
 
-    fun updateImageStat(imageData: ImageData) {
-        log.debug { "+updateImageStat(): image size ${imageData.size}, image download url: ${imageData.downloadUrl}, image content type: ${imageData.contentType}" }
-        currentFilesSize.addAndGet(imageData.size)
+    fun updateImageStat(imageDto: ImageDto) {
+        log.debug { "+updateImageStat(): image size ${imageDto.imageSizeKb}, image download url: ${imageDto.downloadUrl}, image content type: ${imageDto.imageContentType}" }
+        currentFilesSize.addAndGet(imageDto.imageSizeKb)
         currentFilesCount.incrementAndGet()
 
         imageStatRepository.save(ImageStat(currentFilesCount.get(), currentFilesSize.get(), LocalDateTime.now()))

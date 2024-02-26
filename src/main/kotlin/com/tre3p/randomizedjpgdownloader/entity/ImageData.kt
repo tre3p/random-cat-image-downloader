@@ -10,13 +10,13 @@ class ImageData(
     @Column(value = "url") var downloadUrl: String?,
     val size: Double,
     val contentType: String,
-    val content: ByteArray
+    val contentPath: String
 ) {
-    constructor(size: Double, contentType: String, content: ByteArray, downloadUrl: String) : this(
+    constructor(size: Double, contentType: String, contentPath: String, downloadUrl: String) : this(
         null,
         downloadUrl,
         size,
         contentType,
-        content
+        contentPath
     )
 }
