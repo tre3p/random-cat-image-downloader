@@ -61,6 +61,16 @@
             <artifactId>kotlin-logging-jvm</artifactId>
             <version>5.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.reactivestreams</groupId>
+            <artifactId>reactive-streams</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-reactor</artifactId>
+            <version>1.8.0</version> <!-- Use the latest version available -->
+        </dependency>
     </dependencies>
 
     <build>

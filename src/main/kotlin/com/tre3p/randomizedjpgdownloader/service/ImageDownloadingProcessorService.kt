@@ -9,6 +9,7 @@ import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
 import kotlin.random.nextInt
@@ -27,7 +28,7 @@ class ImageDownloadingProcessorService(
 
     @Lazy
     @Autowired
-    private lateinit var img: ImageDownloadingProcessorService
+    private lateinit var imgProcessorService: ImageDownloadingProcessorService
 
     private val log = KotlinLogging.logger {}
 
@@ -52,14 +53,13 @@ class ImageDownloadingProcessorService(
                 }
 
                 if (imageResponse != null) {
-                    processImage(imageResponse)
+                    imgProcessorService.processImage(imageResponse)
                 }
             }
         }
     }
 
-    //@Transactional
-    // TODO: marking this method as @Transactional leads to NoClassDefFoundError on reactivestreams library
+    @Transactional
     suspend fun processImage(imgData: ImageData) {
         imageSaverService.saveImage(imgData)
         imageStatService.updateImageStat(imgData)
