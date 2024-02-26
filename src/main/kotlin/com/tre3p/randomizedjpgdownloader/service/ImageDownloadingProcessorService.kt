@@ -7,6 +7,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import kotlin.random.Random
@@ -24,6 +25,7 @@ class ImageDownloadingProcessorService(
         private const val IMAGE_SIZE_UPPER_BOUND = 5000
     }
 
+    @Lazy
     @Autowired
     private lateinit var img: ImageDownloadingProcessorService
 
