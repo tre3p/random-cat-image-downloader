@@ -7,7 +7,9 @@ import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Component
 
 @Component
-class ApplicationReadyEventListener(private val imageDownloadingProcessorService: ImageDownloadingProcessorService) {
+class ApplicationReadyEventListener(
+    private val imageDownloadingProcessorService: ImageDownloadingProcessorService
+) {
 
     /**
      * Coroutines count set to (available cores * 4) because most of the  work is IO-bound
