@@ -3,6 +3,7 @@ package com.tre3p.randomcatimgdownloader.service
 import com.tre3p.randomcatimgdownloader.dto.ImageDto
 import com.tre3p.randomcatimgdownloader.entity.ImageData
 import io.github.oshai.kotlinlogging.KotlinLogging
+import jakarta.annotation.PostConstruct
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.io.File
 import java.nio.file.Paths
 import java.util.UUID
 import kotlin.random.Random
@@ -38,6 +40,11 @@ class ImageDownloadingProcessorService(
     private lateinit var imageSaveDirectory: String
 
     private val log = KotlinLogging.logger {}
+
+    @PostConstruct
+    fun initImageDirectory() {
+        File(imageSaveDirectory).mkdir()
+    }
 
     suspend fun launchImageDownloading(coroutinesCount: Int) = coroutineScope {
         log.info { "launchImageDownloading(): launching images downloading. coroutinesCount: $coroutinesCount" }
