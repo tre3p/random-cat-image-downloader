@@ -21,7 +21,7 @@ import kotlin.random.nextInt
 
 @Service
 class ImageDownloadingProcessorService(
-    private val imageSaverService: ImageDbSaverService,
+    private val imageDbSaverService: ImageDbSaverService,
     private val imageStatService: ImageStatService,
     private val imageDownloaderService: ImageDownloaderService,
     private val imageDiskSaverService: ImageDiskSaverService
@@ -58,16 +58,12 @@ class ImageDownloadingProcessorService(
         while (true) {
             val randomImageUrl = generateRandomImageDownloadUrl()
             withContext(Dispatchers.IO) {
-                var imageResponse: ImageDto? = null
-
                 try {
-                    imageResponse = imageDownloaderService.downloadImage(randomImageUrl)
+                    imageDownloaderService.downloadImage(randomImageUrl).let {
+                        imgProcessorService.processImage(it)
+                    }
                 } catch (e: Exception) {
                     log.warn { "startImagesProcessing(): error while downloading image: ${e.message}" }
-                }
-
-                if (imageResponse != null) {
-                    imgProcessorService.processImage(imageResponse)
                 }
             }
         }
@@ -82,7 +78,7 @@ class ImageDownloadingProcessorService(
         imageDiskSaverService.saveImageToDisk(imageFilePath, imgDto.imageBytes)
         val imgData = ImageData(imgDto.imageSizeKb, imgDto.imageContentType, imageFilePath, imgDto.downloadUrl)
 
-        imageSaverService.saveImageData(imgData)
+        imageDbSaverService.saveImageData(imgData)
         imageStatService.updateImageStat(imgDto)
     }
 
