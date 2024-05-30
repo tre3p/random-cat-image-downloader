@@ -3,6 +3,13 @@
 Service which main purpose is to start cats images downloading process on application startup, store them in database and log
 information about downloaded cats pictures (statistics) in another table. Images are downloaded with random resolutions from [LoremFlickr](https://loremflickr.com/). 
 
+## Environment variables
+
+You can configure environment variables inside `docker-compose.yml`. Available environments variables:
+
+1) `IMAGE_SAVE_DIRECTORY` - directory to which images of cats will be saved. (default: `cats/`)
+2) `IMAGE_DOWNLOAD_MAX_COUNT` - amount of images to download. (default: `-1`, which means downloading won't stop and you will receive infinite amount of cats images)
+
 ## How to launch
 
 Using Docker:
