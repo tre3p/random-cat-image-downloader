@@ -1,6 +1,7 @@
 package com.tre3p.randomcatimgdownloader.listener
 
 import com.tre3p.randomcatimgdownloader.service.ImageDownloadingProcessorService
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
@@ -19,5 +20,6 @@ class ApplicationReadyEventListener(
     @EventListener(ApplicationReadyEvent::class)
     fun launchJpgDownloading() = runBlocking {
         imageDownloadingProcessorService.launchImageDownloading(coroutinesCount)
+        println("exited")
     }
 }

@@ -20,6 +20,7 @@ services:
       JDBC_USERNAME: postgres
       JDBC_PASSWORD: postgres
       IMAGE_SAVE_DIRECTORY: cats/
+      IMAGE_DOWNLOAD_MAX_COUNT: -1
     volumes:
       - ./cats:/app/cats
     depends_on: [ pg-db ]

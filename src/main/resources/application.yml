@@ -8,3 +8,4 @@ spring:
 
 image:
   directory: ${IMAGE_SAVE_DIRECTORY:cats/}
+  maxCount: ${IMAGE_DOWNLOAD_MAX_COUNT:-1}

@@ -1,21 +1,32 @@
 package com.tre3p.randomcatimgdownloader.service
 
 import com.tre3p.randomcatimgdownloader.dto.ImageDto
-import org.springframework.http.ResponseEntity
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
 
 @Service
-class ImageDownloaderService(private val restTemplate: RestTemplate) {
+class ImageDownloaderService(private val httpClient: HttpClient) {
 
-    suspend fun downloadImage(url: String): ImageDto {
-        val response = restTemplate.getForEntity(url, ByteArray::class.java)
-        return convertImageResponseToImageDto(response, url)
+    private val log = KotlinLogging.logger {}
+
+    suspend fun downloadImage(url: String): ImageDto? {
+        return try {
+            httpClient.get(url).let {
+                convertImageResponseToImageDto(it, url)
+            }
+        } catch (e: Exception) {
+            log.warn { "downloadImage(): error while downloading image: $e" }
+            null
+        }
     }
 
-    private fun convertImageResponseToImageDto(imgResponse: ResponseEntity<ByteArray>, downloadUrl: String): ImageDto {
-        val contentType = imgResponse.headers["Content-Type"]?.first().orEmpty()
-        val content = imgResponse.body ?: byteArrayOf()
+    private suspend fun convertImageResponseToImageDto(imgResponse: HttpResponse, downloadUrl: String): ImageDto {
+        val contentType = imgResponse.headers.get("Content-Type") ?: ""
+        val content = imgResponse.body<ByteArray>()
         val contentSize = content.sizeInKilobytes()
 
         return ImageDto(content, downloadUrl, contentType, contentSize)

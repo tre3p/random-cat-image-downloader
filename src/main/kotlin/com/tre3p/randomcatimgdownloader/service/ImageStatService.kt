@@ -13,9 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger
 @Service
 class ImageStatService(private val imageStatRepository: ImageStatRepository) {
 
-    private lateinit var currentFilesCount: AtomicInteger
+    lateinit var currentFilesCount: AtomicInteger
 
-    private lateinit var currentFilesSize: AtomicDouble
+    lateinit var currentFilesSize: AtomicDouble
 
     private val log = KotlinLogging.logger {}
 
