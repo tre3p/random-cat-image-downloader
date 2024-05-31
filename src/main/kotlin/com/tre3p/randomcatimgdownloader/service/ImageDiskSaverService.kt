@@ -6,23 +6,19 @@ import org.springframework.stereotype.Service
 import java.io.File
 
 @Service
-class ImageDiskSaverService {
+class ImageDiskSaverService : FileSaver {
     private val log = KotlinLogging.logger {}
 
     @Value("\${image.directory}")
     private lateinit var imageSaveDirectoryName: String
 
-    private val saveDirectory: File
-        by lazy { File(imageSaveDirectoryName).also { it.mkdir() } }
+    private val saveDirectory by lazy { File(imageSaveDirectoryName).also { it.mkdir() } }
 
-    fun saveImageToDisk(
-        fileName: String,
-        content: ByteArray,
-    ): String {
-        log.debug { "+saveImageToDisk(): fileName: $fileName, content length: ${content.size}" }
+    override fun saveImage(fileName: String, imageBytes: ByteArray): String {
+        log.debug { "+saveImageToDisk(): fileName: $fileName, content length: ${imageBytes.size}" }
 
         val imagePath = generateImagePath(fileName)
-        File(imagePath).writeBytes(content)
+        File(imagePath).writeBytes(imageBytes)
 
         log.debug { "-saveImageToDisk() imagePath: $imagePath" }
         return imagePath
