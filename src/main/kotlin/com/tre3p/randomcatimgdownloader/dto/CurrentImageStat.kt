@@ -1,6 +1,6 @@
 package com.tre3p.randomcatimgdownloader.dto
 
 data class CurrentImageStat(
-    val totalFilesCount: Int = 0,
-    val totalFilesSize: Double = 0.0
+    var totalFilesCount: Int = 0,
+    var totalFilesSize: Double = 0.0
 )

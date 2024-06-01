@@ -9,7 +9,6 @@ import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Lazy
@@ -21,7 +20,7 @@ class ImageDownloadingProcessorService(
     private val imageRepository: ImageRepository,
     private val imageStatService: ImageStatService,
     private val imageDownloaderService: ImageDownloaderService,
-    private val imageDiskSaverService: ImageDiskSaverService,
+    private val fileSaver: FileSaver,
     @Value("\${image.maxCount}") private val imageMaxCountToDownload: Int
 ) {
     @Lazy
@@ -33,18 +32,20 @@ class ImageDownloadingProcessorService(
     suspend fun launchImageDownloading(coroutinesCount: Int) = coroutineScope {
         log.info { "launchImageDownloading(): launching images downloading. coroutinesCount: $coroutinesCount, imageMaxCountToDownload: $imageMaxCountToDownload" }
         repeat(coroutinesCount) {
-            launch(Dispatchers.Default) { startImagesProcessing() }
+            launch(Dispatchers.Default) {
+                while (isNewImageNeeded()) {
+                    downloadAndProcessImage()
+                }
+            }
         }
         log.info { "launchImageDownloading(): all coroutines are started" }
     }
 
-    private suspend fun startImagesProcessing() {
-        while (isNewImageNeeded()) {
-            val randomImageUrl = generateRandomImageDownloadUrl()
-            imageDownloaderService.downloadImage(randomImageUrl)?.let {
-                if (isNewImageNeeded()) {
-                    imgProcessorService.processImage(it)
-                }
+    private suspend fun downloadAndProcessImage() {
+        val randomImageUrl = generateRandomImageDownloadUrl()
+        imageDownloaderService.downloadImage(randomImageUrl)?.let {
+            if (isNewImageNeeded()) {
+                imgProcessorService.processImage(it)
             }
         }
     }
@@ -53,7 +54,7 @@ class ImageDownloadingProcessorService(
     suspend fun processImage(imgDto: ImageDto) {
         val imageFileName = generateRandomImageFileName()
 
-        val savedImagePath = imageDiskSaverService.saveImageToDisk(imageFileName, imgDto.imageBytes)
+        val savedImagePath = fileSaver.saveFile(imageFileName, imgDto.imageBytes)
         val imgData = ImageData(imgDto.imageSizeKb, imgDto.imageContentType, savedImagePath, imgDto.downloadUrl)
 
         imageRepository.save(imgData)
