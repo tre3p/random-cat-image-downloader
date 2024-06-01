@@ -20,6 +20,5 @@ class ApplicationReadyEventListener(
     @EventListener(ApplicationReadyEvent::class)
     fun launchJpgDownloading() = runBlocking {
         imageDownloadingProcessorService.launchImageDownloading(coroutinesCount)
-        println("exited")
     }
 }

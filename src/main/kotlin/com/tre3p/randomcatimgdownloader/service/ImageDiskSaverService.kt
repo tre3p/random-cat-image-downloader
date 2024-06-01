@@ -14,7 +14,7 @@ class ImageDiskSaverService : FileSaver {
 
     private val saveDirectory by lazy { File(imageSaveDirectoryName).also { it.mkdir() } }
 
-    override fun saveImage(fileName: String, imageBytes: ByteArray): String {
+    override fun saveFile(fileName: String, imageBytes: ByteArray): String {
         log.debug { "+saveImageToDisk(): fileName: $fileName, content length: ${imageBytes.size}" }
 
         val imagePath = generateImagePath(fileName)

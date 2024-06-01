@@ -20,7 +20,7 @@ class ImageDownloadingProcessorService(
     private val imageRepository: ImageRepository,
     private val imageStatService: ImageStatService,
     private val imageDownloaderService: ImageDownloaderService,
-    private val imageDiskSaverService: ImageDiskSaverService,
+    private val fileSaver: FileSaver,
     @Value("\${image.maxCount}") private val imageMaxCountToDownload: Int
 ) {
     @Lazy
@@ -44,7 +44,9 @@ class ImageDownloadingProcessorService(
     private suspend fun downloadAndProcessImage() {
         val randomImageUrl = generateRandomImageDownloadUrl()
         imageDownloaderService.downloadImage(randomImageUrl)?.let {
-            imgProcessorService.processImage(it)
+            if (isNewImageNeeded()) {
+                imgProcessorService.processImage(it)
+            }
         }
     }
 
@@ -52,7 +54,7 @@ class ImageDownloadingProcessorService(
     suspend fun processImage(imgDto: ImageDto) {
         val imageFileName = generateRandomImageFileName()
 
-        val savedImagePath = imageDiskSaverService.saveImage(imageFileName, imgDto.imageBytes)
+        val savedImagePath = fileSaver.saveFile(imageFileName, imgDto.imageBytes)
         val imgData = ImageData(imgDto.imageSizeKb, imgDto.imageContentType, savedImagePath, imgDto.downloadUrl)
 
         imageRepository.save(imgData)
